@@ -31,9 +31,12 @@ module Parse
     end
 
     def self.update(data= nil)
-      data.each do |key, value|
-        data["#{key}"] = data[key] if data[key]
-      end
+      # data.each do |key, value|
+      #   data["#{key}"] = data[key] if data[key]
+      # end
+      data["username"] = data[:username] if data[:username]
+      data["password"] = data[:password] if data[:password]
+      data["session_token"] = data[:session_token] if data[:session_token]
       super(Parse::Protocol::CLASS_USER, data)
     end
 
