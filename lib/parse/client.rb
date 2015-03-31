@@ -25,7 +25,7 @@ module Parse
       @application_id = data[:application_id]
       @api_key        = data[:api_key]
       @master_key     = data[:master_key]
-      @session_token  = session[:session_token]
+      @session_token  = data[:session_token]
       @max_retries    = data[:max_retries] || 3
       @logger         = data[:logger] || Logger.new(STDERR).tap{|l| l.level = Logger::INFO}
       @quiet          = data[:quiet] || false
@@ -64,7 +64,7 @@ module Parse
         Protocol::HEADER_MASTER_KEY     => @master_key,
         Protocol::HEADER_APP_ID         => @application_id,
         Protocol::HEADER_API_KEY        => @api_key,
-        Protocol::HEADER_SESSION_TOKEN  => @session_token,
+        Protocol::HEADER_SESSION_TOKEN  => @session_token || session[:session_token] if session[:session_token],
       }.each do |key, value|
         headers[key] = value if value
       end
