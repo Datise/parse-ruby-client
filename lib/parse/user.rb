@@ -30,6 +30,13 @@ module Parse
       super(Parse::Protocol::CLASS_USER, data)
     end
 
+    def update(data= nil)
+      data.each do |key, value|
+        data["#{key}"] = data[key] if data[key]
+      end
+      super(Parse::Protocol::CLASS_USER, data)
+    end
+
     def uri
       Protocol.user_uri @parse_object_id
     end
