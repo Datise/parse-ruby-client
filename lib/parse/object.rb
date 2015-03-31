@@ -56,7 +56,7 @@ module Parse
     # Write the current state of the local object to the API.
     # If the object has never been saved before, this will create
     # a new object, otherwise it will update the existing stored object.
-    def save
+    def save(session = nil)
       if @parse_object_id
         method = :put
         self.merge!(@op_fields) # use operations instead of our own view of the columns
@@ -65,8 +65,11 @@ module Parse
       end
 
       body = safe_hash.to_json
-
-      data = Parse.client.request(self.uri, method, body)
+      if session == nil
+        data = Parse.client.request(self.uri, method, body, nil)
+      else
+        data = Parse.client.request(self.uri, method, body, session)
+      end
       # if @class_name == Parse::Protocol::CLASS_USER
       #   data.headers[Protocol::HEADER_SESSION_TOKEN] = session[:sessionToken] if session[:sessionToken]
       # end
