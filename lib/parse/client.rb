@@ -84,8 +84,12 @@ module Parse
       end
     end
 
-    def put(uri, body)
-      request(uri, :put, body)
+    def put(uri, body, session_token = nil)
+      if session_token == nil
+        request(uri, :post, body)
+      else
+        request(uri, :post, body, nil, nil, session_token)
+      end
     end
 
     def delete(uri)

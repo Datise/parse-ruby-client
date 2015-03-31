@@ -37,7 +37,7 @@ module Parse
         "field"=>data[:data] }
       session = data[:session]
       objectId = data[:objectId]
-      Parse.client.post(Parse::Protocol.user_uri(objectId), body,session)
+      Parse.client.put(Parse::Protocol.user_uri(objectId), body,session)
     end
 
     def uri
