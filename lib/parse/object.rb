@@ -67,9 +67,9 @@ module Parse
       body = safe_hash.to_json
 
       data = Parse.client.request(self.uri, method, body)
-      if @class_name == Parse::Protocol::CLASS_USER
-        data.headers[Protocol::HEADER_SESSION_TOKEN] = session[:sessionToken] if session[:sessionToken]
-      end
+      # if @class_name == Parse::Protocol::CLASS_USER
+      #   data.headers[Protocol::HEADER_SESSION_TOKEN] = session[:sessionToken] if session[:sessionToken]
+      # end
       if data
         # array operations can return mutated view of array which needs to be parsed
         parse Parse.parse_json(class_name, data)
