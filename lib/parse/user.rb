@@ -31,7 +31,7 @@ module Parse
     end
 
     def self.update(data = nil)
-      body = { "email" => data[:email] }
+      body = { "postalcode" => data[:postalcode] }
       session = data[:session]
       objectId = data[:objectId]
       Parse.client.put(Parse::Protocol.user_uri(objectId), body,session)
