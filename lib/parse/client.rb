@@ -77,7 +77,7 @@ module Parse
     end
 
     def post(uri, body, session_token = nil)
-      if session_token = nil
+      if session_token == nil
         request(uri, :post, body)
       else
         request(uri, :post, body, nil, nil, session_token)
