@@ -31,7 +31,7 @@ module Parse
     end
 
     def self.update(data = nil)
-      body = {"password" => data[:password],
+      body = {"password" => data[:password].to_s,
         "field"=>data[:data] }
       
       objectId = data[:objectId]
