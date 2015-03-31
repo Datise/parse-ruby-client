@@ -55,7 +55,7 @@ module Parse
     # with common basic response handling. Will raise a
     # ParseProtocolError if the response has an error status code,
     # and will return the parsed JSON body on success, if there is one.
-    def request(uri, method = :get, body = nil, query = nil, content_type = nil, session_token = nil)
+    def request(uri, method = :get, body = nil, query = nil, content_type = nil, session = nil)
       headers = {}
 
       {
@@ -64,7 +64,7 @@ module Parse
         Protocol::HEADER_MASTER_KEY     => @master_key,
         Protocol::HEADER_APP_ID         => @application_id,
         Protocol::HEADER_API_KEY        => @api_key,
-        Protocol::HEADER_SESSION_TOKEN  => session_token || @session_token
+        Protocol::HEADER_SESSION_TOKEN  => session || @session_token
       }.each do |key, value|
         headers[key] = value if value
       end
@@ -86,9 +86,9 @@ module Parse
 
     def put(uri, body, session_token = nil)
       if session_token == nil
-        request(uri, :post, body)
+        request(uri, :put, body)
       else
-        request(uri, :post, body, nil, nil, session_token)
+        request(uri, :put, body, nil, nil, session_token)
       end
     end
 
