@@ -65,11 +65,9 @@ module Parse
       end
 
       body = safe_hash.to_json
-      if session == nil
+
         data = Parse.client.request(self.uri, method, body, nil)
-      else
-        data = Parse.client.request(self.uri, method, body, session)
-      end
+
       # if @class_name == Parse::Protocol::CLASS_USER
       #   data.headers[Protocol::HEADER_SESSION_TOKEN] = session[:sessionToken] if session[:sessionToken]
       # end

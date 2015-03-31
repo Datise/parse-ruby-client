@@ -30,15 +30,16 @@ module Parse
       super(Parse::Protocol::CLASS_USER, data)
     end
 
-    def self.update(data= nil)
+    def self.update(data = nil, body)
       # data.each do |key, value|
       #   data["#{key}"] = data[key] if data[key]
       # end
       # data["username"] = data[:username] if data[:username]
       # data["password"] = data[:password] if data[:password]
-      data["session_token"] = data[:session_token] if data[:session_token]
-      data["updating"] = data[:whatever] if data[:whatever]
-      super(Parse::Protocol::CLASS_USER, data)
+      #data["session_token"] = data[:session_token] if data[:session_token]
+      objectId = data[:objectId]
+      Parse.client.post(Parse::Protocol.user_uri(objectId), body)
+      #super(Parse::Protocol::CLASS_USER, data)
     end
 
     def uri
