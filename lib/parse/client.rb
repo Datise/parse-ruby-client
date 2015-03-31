@@ -1,4 +1,5 @@
 # -*- encoding : utf-8 -*-
+# -*- encoding : utf-8 -*-
 require 'parse/protocol'
 require 'parse/error'
 require 'parse/util'
@@ -24,7 +25,7 @@ module Parse
       @application_id = data[:application_id]
       @api_key        = data[:api_key]
       @master_key     = data[:master_key]
-      @session_token  = data[:session_token]
+      @session_token  = session[:session_token]
       @max_retries    = data[:max_retries] || 3
       @logger         = data[:logger] || Logger.new(STDERR).tap{|l| l.level = Logger::INFO}
       @quiet          = data[:quiet] || false
