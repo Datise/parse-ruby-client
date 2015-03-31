@@ -33,9 +33,9 @@ module Parse
     def self.update(data = nil)
       body = {"password" => data[:password].to_s,
         "field"=>data[:data] }
-      
+      session = data[:session]
       objectId = data[:objectId]
-      Parse.client.post(Parse::Protocol.user_uri(objectId), body)
+      Parse.client.post(Parse::Protocol.user_uri(objectId), body,session)
     end
 
     def uri
