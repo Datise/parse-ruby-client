@@ -64,7 +64,7 @@ module Parse
         Protocol::HEADER_MASTER_KEY     => @master_key,
         Protocol::HEADER_APP_ID         => @application_id,
         Protocol::HEADER_API_KEY        => @api_key,
-        Protocol::HEADER_SESSION_TOKEN  => @session_token unless session_token != nil
+        Protocol::HEADER_SESSION_TOKEN  => session_token || @session_token
       }.each do |key, value|
         headers[key] = value if value
       end
