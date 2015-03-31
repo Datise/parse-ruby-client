@@ -92,8 +92,12 @@ module Parse
       end
     end
 
-    def delete(uri)
-      request(uri, :delete)
+    def delete(uri, session_token = nil)
+      if session_token == nil
+        request(uri, :delete)
+      else
+        request(uri, :delete, nil, nil, nil, session_token)
+      end
     end
 
   end

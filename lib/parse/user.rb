@@ -30,11 +30,17 @@ module Parse
       super(Parse::Protocol::CLASS_USER, data)
     end
 
-    def self.update(data = nil)
-      body = { "postalcode" => data[:postalcode] }
+    def self.update(data = nil, body)
+      body = body
       session = data[:session]
       objectId = data[:objectId]
       Parse.client.put(Parse::Protocol.user_uri(objectId), body,session)
+    end
+
+    def self.delete(data = nil)
+      session = data[:session]
+      objectId = data[:objectId]
+      Parse.client.delete(Parse::Protocol.user_uri(objectID), session)
     end
 
     def uri
