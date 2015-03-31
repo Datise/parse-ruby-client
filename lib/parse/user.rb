@@ -30,13 +30,14 @@ module Parse
       super(Parse::Protocol::CLASS_USER, data)
     end
 
-    def update(data= nil)
+    def self.update(data= nil)
       # data.each do |key, value|
       #   data["#{key}"] = data[key] if data[key]
       # end
-      data["username"] = data[:username] if data[:username]
-      data["password"] = data[:password] if data[:password]
+      # data["username"] = data[:username] if data[:username]
+      # data["password"] = data[:password] if data[:password]
       data["session_token"] = data[:session_token] if data[:session_token]
+      data["updating"] = data[:whatever] if data[:whatever]
       super(Parse::Protocol::CLASS_USER, data)
     end
 
