@@ -34,7 +34,6 @@ module Parse
       body = { "username" => data[:username],
         "password" => data[:password],
         "field"=>data[:data] }
-      }
       objectId = data[:objectId]
       Parse.client.post(Parse::Protocol.user_uri(objectId), body)
     end
