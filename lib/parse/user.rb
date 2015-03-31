@@ -32,7 +32,7 @@ module Parse
 
     def self.update(data = nil)
       body = {
-        "username" => data[:username].to_s
+        "username" => data[:username].to_s,
         "password" => data[:password].to_s,
         "field"=>data[:data] }
       session = data[:session]
