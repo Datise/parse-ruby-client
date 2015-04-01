@@ -94,6 +94,8 @@ module Parse
     end
 
     def delete(uri, session_token = nil)
+      if session_token      
+        puts "token before request: " + " " + session_token
       if session_token == nil
         request(uri, :delete)
       else
