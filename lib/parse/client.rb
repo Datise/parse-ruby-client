@@ -68,8 +68,7 @@ module Parse
       }.each do |key, value|
         headers[key] = value if value
       end
-      i = @session.send(method, uri, query || body || {}, headers).body
-      puts i
+      @session.send(method, uri, query || body || {}, headers).body
     end
 
     def get(uri)
@@ -81,7 +80,8 @@ module Parse
       if session_token == nil
         request(uri, :post, body)
       else
-        request(uri, :post, body, nil, nil, session_token)
+        output = request(uri, :post, body, nil, nil, session_token)
+        puts output
       end
     end
 
