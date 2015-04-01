@@ -68,8 +68,8 @@ module Parse
       }.each do |key, value|
         headers[key] = value if value
       end
-
-      puts @session.send(method, uri, query || body || {}, headers).body
+      puts "session before request is + " + session
+      @session.send(method, uri, query || body || {}, headers).body
     end
 
     def get(uri)
