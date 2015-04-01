@@ -68,7 +68,6 @@ module Parse
       }.each do |key, value|
         headers[key] = value if value
       end
-      puts "session before request is + " + session
       @session.send(method, uri, query || body || {}, headers).body
     end
 
@@ -77,6 +76,7 @@ module Parse
     end
 
     def post(uri, body, session_token = nil)
+      puts "token before request: " + " " + session_token
       if session_token == nil
         request(uri, :post, body)
       else
