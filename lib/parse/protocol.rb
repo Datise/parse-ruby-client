@@ -120,7 +120,7 @@ module Parse
 
     USER_LOGIN_URI  = "/#{VERSION}/login"
     PASSWORD_RESET_URI = "/#{VERSION}/requestPasswordReset"
-    SESSION_LOGOUT_URI = "/#{VERSION}/logout"
+    SESSION_LOGOUT_URI = "/#{VERSION}/sessions/"
     CLOUD_FUNCTIONS_PATH = "functions"
 
     BATCH_REQUEST_URI = "batch"

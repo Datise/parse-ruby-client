@@ -22,7 +22,7 @@ module Parse
     def self.delete_session(data = nil)
       session = data[:session]
       puts "gem session at 23 is : " + session
-      Parse.client.post(Parse::Protocol::SESSION_LOGOUT_URI, nil, session)
+      Parse.client.post(Parse::Protocol::SESSION_LOGOUT_URI + session)
     end
 
     def self.reset_password(email)
