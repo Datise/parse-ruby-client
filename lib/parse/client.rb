@@ -69,7 +69,7 @@ module Parse
         headers[key] = value if value
       end
 
-      @session.send(method, uri, query || body || {}, headers).body
+      puts @session.send(method, uri, query || body || {}, headers).body
     end
 
     def get(uri)
