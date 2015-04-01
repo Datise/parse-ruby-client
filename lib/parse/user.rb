@@ -19,6 +19,11 @@ module Parse
       new(response)
     end
 
+    def self.delete_session(data = nil)
+      session = data[:session]
+      Parse.client.post(Parse::Protocol::SESSION_LOGOUT_URI, nil, session)
+    end
+
     def self.reset_password(email)
       body = {"email" => email}
       Parse.client.post(Parse::Protocol::PASSWORD_RESET_URI, body.to_json)
