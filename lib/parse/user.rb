@@ -27,7 +27,7 @@ module Parse
 
     def self.reset_password(email)
       body = {"email" => email}
-      Parse.client.post(Parse::Protocol::PASSWORD_RESET_URI, body.to_json)
+      Parse.client.post(Parse::Protocol::PASSWORD_RESET_URI, body)
     end
 
     def initialize(data = nil)
