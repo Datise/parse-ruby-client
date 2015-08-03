@@ -6,33 +6,40 @@ require 'parse/object'
 
 module Parse
   class User < Parse::Object
-
-    def self.authenticate(username, password)
+    def self.authenticate(username, password, client = nil)
       body = {
-        "username" => username,
-        "password" => password
+        'username' => username,
+        'password' => password
       }
 
-      response = Parse.client.request(Parse::Protocol::USER_LOGIN_URI, :get, nil, body)
-      Parse.client.session_token = response[Parse::Protocol::KEY_USER_SESSION_TOKEN]
+      client ||= Parse.client
+      response = client.request(Parse::Protocol::USER_LOGIN_URI, :get, nil, body)
+      client.session_token = response[Parse::Protocol::KEY_USER_SESSION_TOKEN]
 
-      new(response)
+      new(response, client)
     end
 
+# <<<<<<< HEAD
     def self.delete_session(data = nil)
       session = data[:session]
       Parse.client.delete(Parse::Protocol::SESSION_LOGOUT_URI + session)
     end
 
-    def self.reset_password(email)
-      body = {"email" => email}
-      Parse.client.post(Parse::Protocol::PASSWORD_RESET_URI, body.to_json)
+#     def self.reset_password(email)
+#       body = {"email" => email}
+#       Parse.client.post(Parse::Protocol::PASSWORD_RESET_URI, body.to_json)
+# =======
+    def self.reset_password(email, client = nil)
+      client ||= Parse.client
+      body = { 'email' => email }
+      client.post(Parse::Protocol::PASSWORD_RESET_URI, body.to_json)
     end
 
-    def initialize(data = nil)
-      data["username"] = data[:username] if data[:username]
-      data["password"] = data[:password] if data[:password]
-      super(Parse::Protocol::CLASS_USER, data)
+    def initialize(data = nil, client = nil)
+      client ||= Parse.client
+      data['username'] = data[:username] if data[:username]
+      data['password'] = data[:password] if data[:password]
+      super(Parse::Protocol::CLASS_USER, data, client)
     end
 
     def self.update(data = nil, body)
@@ -51,6 +58,5 @@ module Parse
     def uri
       Protocol.user_uri @parse_object_id
     end
-
   end
 end

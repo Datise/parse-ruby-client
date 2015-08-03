@@ -5,42 +5,56 @@ require 'parse/error'
 module Parse
   class Push
     attr_accessor :channels
-    attr_accessor :channel
     attr_accessor :where
     attr_accessor :type
     attr_accessor :expiration_time_interval
     attr_accessor :expiration_time
     attr_accessor :push_time
     attr_accessor :data
+    attr_accessor :client
 
-    def initialize(data, channel = "")
+    def initialize(data, channel = '', client = nil)
       @data = data
-      @channel = channel
+
+      # NOTE: if no channel is specified, by setting "where" to an empty clause
+      #   a push is sent to all clients.
+      if !channel || channel.empty?
+        @where = {}
+      else
+        @channels = [channel]
+      end
+
+      @client = client || Parse.client
     end
 
     def save
-      uri   = Protocol.push_uri
+      body = { data: @data }
 
-      body = { :data => @data, :channel => @channel }
+      if @type
+        if @where
+          @where.merge!(deviceType: @type)
+        else
+          body.merge!(deviceType: @type)
+        end
+      end
 
+      # NOTE: Parse does not support channels and where at the same time
+      # so we make channels part of the query conditions
       if @channels
-        body.merge!({ :channels => @channels })
-        body.delete :channel
+        if @where
+          @where.merge!(channels: @channels)
+        else
+          body.merge!(channels: @channels)
+        end
       end
 
-      if @where
-        body.merge!({ :where => @where })
-        body.delete :channel
-      end
+      body.merge!(where: @where) if @where
 
-      body.merge!({ :expiration_interval => @expiration_time_interval }) if @expiration_time_interval
-      body.merge!({ :expiration_time => @expiration_time }) if @expiration_time
-      body.merge!({ :push_time => @push_time }) if @push_time
-      body.merge!({ :type => @type }) if @type
+      body.merge!(expiration_interval: @expiration_time_interval) if @expiration_time_interval
+      body.merge!(expiration_time: @expiration_time) if @expiration_time
+      body.merge!(push_time: @push_time) if @push_time
 
-      response = Parse.client.request uri, :post, body.to_json, nil
+      @client.request Protocol.push_uri, :post, body.to_json
     end
-
   end
-
 end

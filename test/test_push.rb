@@ -1,45 +1,191 @@
 require 'helper'
 
 class TestPush < ParseTestCase
+  def test_initialize_with_only_data
+    data = { alert: 'foobar' }
+    push = @client.push(data)
 
-  def test_save_without_where
-    data = {:foo => 'bar',
-            :alert => 'message'}
-    pf_push = Parse::Push.new(data, "some_chan")
-    pf_push.type = 'ios'
+    assert_equal data, push.data
+    assert push.where.empty?
+    assert_raises(NoMethodError) do
+      push.channel
+    end
+  end
 
-    query = Parse::Query.new(Parse::Protocol::CLASS_INSTALLATION).eq('deviceToken', 'baz')
+  def test_initialize_with_data_and_channel
+    data = { alert: 'foobar' }
+    push = @client.push(data, 'foobar')
 
-    Parse::Client.any_instance.expects(:request).with do |uri, method, body, query|
-      hash = JSON.parse(body)
+    assert_equal data, push.data
+    assert_nil push.where
+    assert_equal ['foobar'], push.channels
+  end
+
+  def test_push_save_with_type_without_channels_without_where
+    push = @client.push(alert: 'foobar')
+    push.type = 'ios'
+
+    Parse::Client.any_instance.expects(:request).with do |uri, method, body, q|
+      assert_equal Parse::Protocol.push_uri, uri
       assert_equal :post, method
-      assert has_entries('type' => 'ios', 'channel' => "some_chan").matches?([hash])
-      assert has_entries('foo' => 'bar', 'alert' => 'message').matches?([hash['data']])
-      assert_nil query
+      assert_nil q
+
+      body = JSON.parse(body)
+      expected_result = {
+        'data' => { 'alert' => 'foobar' },
+        'where' => { 'deviceType' => 'ios' }
+      }
+      assert_equal expected_result, body
+
       true
     end.returns({}.to_json)
 
-    pf_push.save
+    push.save
   end
 
+  def test_push_save_with_type_and_channels_without_where
+    push = @client.push({ alert: 'foobar' }, 'foobar')
+    push.type = 'ios'
 
-  def test_save_with_where_removes_channel
-    data = {:foo => 'bar',
-            :alert => 'message'}
-    pf_push = Parse::Push.new(data, "some_chan")
-    pf_push.type = 'ios'
+    Parse::Client.any_instance.expects(:request).with do |uri, method, body, q|
+      assert_equal Parse::Protocol.push_uri, uri
+      assert_equal :post, method
+      assert_nil q
 
-    query = Parse::Query.new(Parse::Protocol::CLASS_INSTALLATION).eq('deviceToken', 'baz')
-    pf_push.where = query.where
+      body = JSON.parse(body)
+      expected_result = {
+        'data' => { 'alert' => 'foobar' },
+        'deviceType' => 'ios',
+        'channels' => ['foobar']
+      }
+      assert_equal expected_result, body
 
-    Parse::Client.any_instance.expects(:request).with do |uri, method, body, query|
-      hash = JSON.parse(body)
-      assert_false has_entries('channel' => "some_chan").matches?([hash])
-      assert has_entries('deviceToken' => 'baz').matches?([hash['where']])
       true
     end.returns({}.to_json)
 
-    pf_push.save
+    push.save
   end
 
+  def test_push_save_with_type_without_channels_with_where
+    push = @client.push(alert: 'foobar')
+    push.type = 'ios'
+    push.where = { appName: 'Test' }
+
+    Parse::Client.any_instance.expects(:request).with do |uri, method, body, q|
+      assert_equal Parse::Protocol.push_uri, uri
+      assert_equal :post, method
+      assert_nil q
+
+      body = JSON.parse(body)
+      expected_result = {
+        'data' => { 'alert' => 'foobar' },
+        'where' => { 'deviceType' => 'ios', 'appName' => 'Test' }
+      }
+      assert_equal expected_result, body
+
+      true
+    end.returns({}.to_json)
+
+    push.save
+  end
+
+  def test_push_save_without_type_with_channels_with_where
+    push = @client.push(alert: 'foobar')
+    push.channels = ['foobar']
+    push.where = { appName: 'Test' }
+
+    Parse::Client.any_instance.expects(:request).with do |uri, method, body, q|
+      assert_equal Parse::Protocol.push_uri, uri
+      assert_equal :post, method
+      assert_nil q
+
+      body = JSON.parse(body)
+      expected_result = {
+        'data' => { 'alert' => 'foobar' },
+        'where' => { 'channels' => ['foobar'], 'appName' => 'Test' }
+      }
+      assert_equal expected_result, body
+
+      true
+    end.returns({}.to_json)
+
+    push.save
+  end
+
+  def test_push_save_only_with_channels
+    push = @client.push(alert: 'foobar')
+    push.channels = %w(abcdef bcdefg)
+
+    Parse::Client.any_instance.expects(:request).with do |uri, method, body, q|
+      assert_equal Parse::Protocol.push_uri, uri
+      assert_equal :post, method
+      assert_nil q
+
+      body = JSON.parse(body)
+      expected_result = {
+        'data' => { 'alert' => 'foobar' },
+        'where' => { 'channels' => %w(abcdef bcdefg) }
+      }
+      assert_equal expected_result, body
+
+      true
+    end.returns({}.to_json)
+
+    push.save
+  end
+
+  def test_push_save_only_with_where
+    push = @client.push(alert: 'foobar')
+    push.where = { appName: 'Test' }
+
+    Parse::Client.any_instance.expects(:request).with do |uri, method, body, q|
+      assert_equal Parse::Protocol.push_uri, uri
+      assert_equal :post, method
+      assert_nil q
+
+      body = JSON.parse(body)
+      expected_result = {
+        'data' => { 'alert' => 'foobar' },
+        'where' => { 'appName' => 'Test' }
+      }
+      assert_equal expected_result, body
+
+      true
+    end.returns({}.to_json)
+
+    push.save
+  end
+
+  def test_push_save_with_push_time
+    push = @client.push(alert: 'foobar')
+    push.push_time = Time.at(0).iso8601
+
+    Parse::Client.any_instance.expects(:request).with do |uri, method, body, q|
+      assert_equal Parse::Protocol.push_uri, uri
+      assert_equal :post, method
+      assert_nil q
+
+      body = JSON.parse(body)
+      expected_result = {
+        'data' => { 'alert' => 'foobar' },
+        'where' => {},
+        'push_time' => push.push_time
+      }
+      assert_equal expected_result, body
+
+      true
+    end.returns({}.to_json)
+
+    push.save
+  end
+
+  def test_push_with_channel_and_type
+    VCR.use_cassette('test_push_with_channel_and_type') do
+      data = { alert: 'This is a notification from Parse' }
+      push = @client.push(data, 'Giants')
+      push.type = 'ios'
+      result = push.save
+      assert result['result']
+    end
+  end
 end
