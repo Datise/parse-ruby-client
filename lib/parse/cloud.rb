@@ -21,4 +21,12 @@ module Parse
     end
 
   end
+
+  # module Notification
+  #   class Push
+  #     attr_accessor
+
+
+  #   end
+  # end
 end
