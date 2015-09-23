@@ -87,7 +87,7 @@ module Parse
 # <<<<<<< HEAD
 #         Protocol::HEADER_SESSION_TOKEN  => session || @session_token
 # =======
-        Protocol::HEADER_SESSION_TOKEN  => @session_token
+        Protocol::HEADER_SESSION_TOKEN  => session || @session_token
 # >>>>>>> upstream/master
       }.each do |key, value|
         headers[key] = value if value
@@ -105,7 +105,7 @@ module Parse
     end
 
     def post(uri, body, session_token = nil)
-      if session_token == nil
+      if session_token.nil?
         request(uri, :post, body)
       else
         output = request(uri, :post, body, nil, nil, session_token)
@@ -114,7 +114,7 @@ module Parse
     end
 
     def put(uri, body, session_token = nil)
-      if session_token == nil
+      if session_token.nil?
         request(uri, :put, body)
       else
         request(uri, :put, body, nil, nil, session_token)
@@ -122,7 +122,7 @@ module Parse
     end
 
     def delete(uri, session_token = nil)
-      if session_token == nil
+      if session_token.nil?
         request(uri, :delete)
       else
         request(uri, :delete, nil, nil, nil, session_token)
