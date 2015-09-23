@@ -45,7 +45,7 @@ module Parse
     def self.delete(data = nil)
       session = data[:session]
       objectId = data[:objectId]
-      Parse.client.delete(Parse::Protocol.user_uri(objectID), session)
+      Parse.client.delete(Parse::Protocol.user_uri(objectId), session)
     end
 
     def uri
