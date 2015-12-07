@@ -51,5 +51,19 @@ module Parse
     def uri
       Protocol.user_uri @parse_object_id
     end
+
+    class Facebook
+      def initialize(data = nil)
+        authData["id"] = data["id"]
+        authData['access_token'] = data["access_token"]
+        authData['expiration_date'] = data["expiration_date"]
+        body = {"authData" => {"facebook" => authData}}
+        Parse.client.post(Parse::Protocol.user_uri, authData)
+      end
+
+      def self.test
+        puts "functional"
+      end
+    end
   end
 end
