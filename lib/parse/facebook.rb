@@ -1,7 +1,7 @@
 require 'parse/protocol'
 require 'parse/user'
 class User
-  module Facebook
+  class Facebook
     def initialize(data = nil)
       authData["id"] = data["id"]
       authData['access_token'] = data["access_token"]
