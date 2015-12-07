@@ -51,6 +51,5 @@ module Parse
     def uri
       Protocol.user_uri @parse_object_id
     end
-
   end
 end
