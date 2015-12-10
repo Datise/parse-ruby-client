@@ -68,6 +68,7 @@ module Parse
       }.each do |key, value|
         headers[key] = value if value
       end
+      binding.pry
       @session.send(method, uri, query || body || {}, headers).body
     end
 
@@ -76,7 +77,6 @@ module Parse
     end
 
     def post(uri, body, session_token = nil)
-      binding.pry
       if session_token == nil
         request(uri, :post, body)
       else
