@@ -55,6 +55,7 @@ module Parse
     class Facebook
       attr_reader :body
       def initialize(data)
+        puts data
         @body = {"authData" => {"facebook" => data}}
       end
 
