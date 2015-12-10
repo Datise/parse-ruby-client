@@ -59,7 +59,7 @@ module Parse
       end
 
       def save
-        puts @body
+        binding.pry
         Parse.client.post(Parse::Protocol.user_uri, @body)
         #Parse.client.session_token = response[Parse::Protocol::KEY_USER_SESSION_TOKEN]
       end
