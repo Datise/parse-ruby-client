@@ -54,7 +54,7 @@ module Parse
 
     class Facebook
       attr_reader :body
-      def initialize(data = nil)
+      def initialize(data)
         @body = {"authData" => {"facebook" => data}}
       end
 
