@@ -53,12 +53,9 @@ module Parse
     end
 
     class Facebook
+      attr_reader :body
       def initialize(data = nil)
-        authData = {}
-        authData["id"] = data["id"]
-        authData['access_token'] = data["access_token"]
-        authData['expiration_date'] = data["expiration_date"]
-        @body = {"authData" => {"facebook" => authData}}
+        @body = {"authData" => {"facebook" => data}}
       end
 
       def save
