@@ -63,8 +63,16 @@ module Parse
 
       def save
         Parse.client.post(Parse::Protocol.user_uri, @body)
-        Parse.client.session_token = response[Parse::Protocol::KEY_USER_SESSION_TOKEN]
+        #Parse.client.session_token = response[Parse::Protocol::KEY_USER_SESSION_TOKEN]
       end
     end
+
+    # class Twitter
+    #   def initialize(data = nil)
+    #     authData = {}
+    #     authData['id'] = data['id']
+    #     authData['access_token']
+    #   end
+    # end
   end
 end

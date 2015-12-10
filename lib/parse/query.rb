@@ -107,6 +107,10 @@ module Parse
       add_constraint field, { "$exists" => value }
       self
     end
+    
+    def near(field, value)
+      add_constraint field, { "$nearSphere" => value}
+    end
 
     def in_query(field, query=nil)
       query_hash = {Parse::Protocol::KEY_CLASS_NAME => query.class_name, "where" => query.where}
