@@ -107,9 +107,12 @@ module Parse
       add_constraint field, { "$exists" => value }
       self
     end
-    
+
     def near(field, value)
+      binding.pry
       add_constraint field, { "$nearSphere" => value}
+      binding.pry
+      self
     end
 
     def in_query(field, query=nil)
