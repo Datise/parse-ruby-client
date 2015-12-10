@@ -53,13 +53,13 @@ module Parse
     end
 
     class Facebook
-      attr_reader :body
+      attr_accessor :body
       def initialize(data)
-        puts data
         @body = {"authData" => {"facebook" => data}}
       end
 
       def save
+        puts @body
         Parse.client.post(Parse::Protocol.user_uri, @body)
         #Parse.client.session_token = response[Parse::Protocol::KEY_USER_SESSION_TOKEN]
       end
