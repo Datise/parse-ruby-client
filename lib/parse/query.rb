@@ -108,8 +108,9 @@ module Parse
       self
     end
 
-    def near(field, value)
+    def near(field, value, distance = nil)
       value['__type'] = "GeoPoint"
+      binding.pry
       add_constraint field, { "$nearSphere" => value}
       self
     end
