@@ -39,6 +39,7 @@ module Parse
       body = body
       session = data[:session]
       objectId = data[:objectId]
+      binding.pry
       Parse.client.put(Parse::Protocol.user_uri(objectId), body,session)
     end
 
